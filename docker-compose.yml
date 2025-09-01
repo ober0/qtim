@@ -12,15 +12,14 @@ services:
         depends_on:
             - postgres-qtim
             - redis-qtim
+        environment:
+            DB_HOST: postgres-qtim
+            REDIS_URL: redis://redis-qtim:6379
         ports:
             - '3000:3000'
-        environment:
-            DATABASE_URL: postgresql://admin:admin@postgres-qtim:5432/qtim
-            REDIS_URL: redis://redis-qtim:6379
-        entrypoint: >
+        command: >
             sh -c "
-              npm run migrate:deploy &&
-              npm run seed &&
+              npm run migration:run &&
               npm run prod
             "
 

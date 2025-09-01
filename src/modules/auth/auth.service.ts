@@ -1,5 +1,4 @@
 import { ConflictException, Injectable } from '@nestjs/common'
-import { AuthRepository } from './auth.repository'
 import { UserService } from '../user/user.service'
 import { PasswordService } from '../password/password.service'
 import { TokenService } from '../token/token.service'
@@ -11,7 +10,6 @@ import { RefreshBaseDto } from './dto/refresh.dto'
 @Injectable()
 export class AuthService {
     constructor(
-        private readonly repository: AuthRepository,
         private readonly userService: UserService,
         private readonly passwordService: PasswordService,
         private readonly tokenService: TokenService

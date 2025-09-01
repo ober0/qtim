@@ -1,45 +1,51 @@
 import { Injectable } from '@nestjs/common'
-import { PrismaService } from '../prisma/prisma.service'
-import { UserInclude, UserWithPasswordInclude } from './const/include.const'
 import { UserCreateDto } from './dto/create.dto'
-import { UserResponseDto, UserResponseWithUserDto } from './dto/response.dto'
+import { InjectRepository } from '@nestjs/typeorm'
+import { User } from '../../entities/user.entity'
+import { Repository } from 'typeorm'
+import { Person } from '../../entities/person.entity'
+import { Password } from '../../entities/password.entity'
 
 @Injectable()
 export class UserRepository {
-    constructor(private readonly prisma: PrismaService) {}
+    constructor(
+        @InjectRepository(User)
+        private readonly repo: Repository<User>,
+
+        @InjectRepository(Person)
+        private readonly personRepo: Repository<Person>,
+
+        @InjectRepository(Password)
+        private readonly passwordRepo: Repository<Password>
+    ) {}
 
     async findOneByEmail(email: string, withPassword: boolean = false) {
-        return this.prisma.user.findUnique({
+        return this.repo.findOne({
             where: { email },
-            ...(withPassword ? UserWithPasswordInclude : UserInclude)
+            relations: withPassword ? ['password', 'person'] : ['person']
         })
     }
 
     async findOneById(id: string) {
-        return this.prisma.user.findUnique({
+        return this.repo.findOne({
             where: { id },
-            ...UserInclude
+            relations: ['person', 'password']
         })
     }
 
-    async create(dto: UserCreateDto): Promise<UserResponseDto> {
-        return this.prisma.user.create({
-            data: {
-                email: dto.email,
-                password: {
-                    create: {
-                        password: dto.password
-                    }
-                },
-                person: {
-                    create: {
-                        firstName: dto.firstName,
-                        lastName: dto.lastName,
-                        patronymic: dto?.patronymic
-                    }
-                }
+    async create(dto: UserCreateDto) {
+        const user = this.repo.create({
+            email: dto.email,
+            person: {
+                firstName: dto.firstName,
+                lastName: dto.lastName,
+                patronymic: dto.patronymic
             },
-            ...UserInclude
+            password: {
+                password: dto.password
+            }
         })
+
+        return this.repo.save(user)
     }
 }

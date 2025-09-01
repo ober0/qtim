@@ -5,20 +5,15 @@
     "author": "",
     "private": true,
     "license": "UNLICENSED",
-    "prisma": {
-        "seed": "ts-node -r tsconfig-paths/register ./prisma/seeds/seed.ts"
-    },
     "scripts": {
         "build": "nest build",
-        "seed": "ts-node -r tsconfig-paths/register ./prisma/seeds/seed.ts",
-        "seed:js": "npm run build && node dist/prisma/seeds/seed.js",
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
         "dev": "nest start --watch",
-        "prod": "node dist/src/main.js",
-        "generate": "npx prisma generate",
-        "migrate:dev": "npx prisma migrate dev",
-        "migrate:deploy": "npx prisma migrate deploy",
-        "reset": "npx prisma migrate reset --force",
+        "prod": "node dist/main.js",
+        "migration:generate": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate src/migrations/Init -d src/modules/typeorm/cli.config.ts",
+        "migration:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d src/modules/typeorm/cli.config.ts",
+        "migration:revert": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d src/modules/typeorm/cli.config.ts",
+        "migration:reset": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js schema:drop -d src/modules/typeorm/cli.config.ts && npm run migration:run",
         "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
         "test": "jest",
         "test:watch": "jest --watch",
@@ -34,6 +29,7 @@
         "@nestjs/passport": "^11.0.5",
         "@nestjs/platform-express": "^11.0.1",
         "@nestjs/swagger": "^11.2.0",
+        "@nestjs/typeorm": "^11.0.0",
         "@prisma/client": "^6.15.0",
         "bcryptjs": "^3.0.2",
         "class-transformer": "^0.5.1",
@@ -41,8 +37,10 @@
         "ioredis": "^5.7.0",
         "passport": "^0.7.0",
         "passport-jwt": "^4.0.1",
+        "pg": "^8.16.3",
         "reflect-metadata": "^0.2.2",
-        "rxjs": "^7.8.1"
+        "rxjs": "^7.8.1",
+        "typeorm": "^0.3.26"
     },
     "devDependencies": {
         "@eslint/eslintrc": "^3.2.0",

@@ -18,11 +18,6 @@ export class UserService {
         private readonly redisService: RedisService
     ) {}
 
-    @Cacheable({
-        keyPrefix: UserMessagePatterns.FIND_ONE_BY_EMAIL,
-        ttl: TtlEnum.THREE_HOUR,
-        includedIndexes: [0]
-    })
     async findOneByEmail(email: string): Promise<UserResponseDto | null> {
         return this.repository.findOneByEmail(email, false)
     }
