@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
 import { ArticleCreateDto } from './dto/create'
 import { ArticleRepository } from './article.repository'
 import { ArticleResponseDto } from './dto/response'
@@ -14,8 +14,9 @@ export class ArticleService {
         return this.articleRepository.create(dto, user)
     }
 
-    async update(dto: ArticleCreateDto, id: string) {
-        await this.findOneById(id)
+    async update(user: UserBaseDto, dto: ArticleCreateDto, id: string) {
+        const article = await this.findOneById(id)
+        if (article.authorId !== user.id) throw new ForbiddenException('Нет доступа на редактирование')
         return this.articleRepository.update(dto, id)
     }
 
@@ -25,8 +26,9 @@ export class ArticleService {
         return article
     }
 
-    async delete(id: string) {
-        await this.findOneById(id)
+    async delete(user: UserBaseDto, id: string) {
+        const article = await this.findOneById(id)
+        if (article.authorId !== user.id) throw new ForbiddenException('Нет доступа на удаление')
         const result = await this.articleRepository.delete(id)
         return {
             count: result.affected

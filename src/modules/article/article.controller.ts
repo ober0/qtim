@@ -27,8 +27,8 @@ export class ArticleController {
     @ApiOperation({ summary: 'Обновление статьи' })
     @ApiSecurity('bearer')
     @UseGuards(JwtAuthGuard)
-    async update(@Param('id') id: string, @Body() dto: ArticleCreateDto) {
-        return this.articleService.update(dto, id)
+    async update(@DecodeUser() user: UserBaseDto, @Param('id') id: string, @Body() dto: ArticleCreateDto) {
+        return this.articleService.update(user, dto, id)
     }
 
     @Delete(':id')
@@ -36,8 +36,8 @@ export class ArticleController {
     @ApiOperation({ summary: 'Удалить статью' })
     @ApiSecurity('bearer')
     @UseGuards(JwtAuthGuard)
-    async delete(@Param('id') id: string) {
-        return this.articleService.delete(id)
+    async delete(@DecodeUser() user: UserBaseDto, @Param('id') id: string) {
+        return this.articleService.delete(user, id)
     }
 
     @Post('search')
