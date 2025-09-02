@@ -12,3 +12,17 @@ export class PaginationDto {
     @IsNumber()
     page: number
 }
+
+export class PaginationResponseDto {
+    @ApiProperty()
+    total: number
+
+    @ApiProperty()
+    page: number
+
+    @ApiProperty()
+    count: number
+
+    @ApiProperty()
+    totalPages: number
+}

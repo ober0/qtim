@@ -1,6 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, JoinColumn, Generated } from 'typeorm'
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    CreateDateColumn,
+    UpdateDateColumn,
+    OneToOne,
+    JoinColumn,
+    Generated,
+    OneToMany
+} from 'typeorm'
 import { Password } from './password.entity'
 import { Person } from './person.entity'
+import { Article } from './article.entity'
 
 @Entity({ name: 'users' })
 export class User {
@@ -33,4 +44,7 @@ export class User {
 
     @Column({ unique: true })
     personId: string
+
+    @OneToMany(() => Article, (article) => article.author)
+    articles: Article[]
 }

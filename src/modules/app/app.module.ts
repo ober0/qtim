@@ -7,6 +7,7 @@ import { AuthModule } from '../auth/auth.module'
 import { TokenModule } from '../token/token.module'
 import { UserModule } from '../user/user.module'
 import { TypeormModule } from '../typeorm/typeorm.module'
+import { ArticleModule } from '../article/article.module'
 
 @Module({
     imports: [
@@ -18,7 +19,8 @@ import { TypeormModule } from '../typeorm/typeorm.module'
         PasswordModule,
         AuthModule,
         TokenModule,
-        UserModule
+        UserModule,
+        ArticleModule
     ]
 })
 export class AppModule implements NestModule {

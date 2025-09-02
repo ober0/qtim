@@ -6,6 +6,7 @@ import { Person } from '../../entities/person.entity'
 import { Password } from '../../entities/password.entity'
 
 import * as dotenv from 'dotenv'
+import { Article } from '../../entities/article.entity'
 
 dotenv.config()
 const config: PostgresConnectionOptions = {
@@ -16,7 +17,7 @@ const config: PostgresConnectionOptions = {
     password: process.env.DB_PASS || 'admin',
     database: process.env.DB_NAME || 'postgres',
     schema: process.env.DB_SCHEMA || 'public',
-    entities: [User, Person, Password],
+    entities: [User, Person, Password, Article],
     synchronize: process.env.DB_SYNC === 'true',
     migrations: ['src/migrations/*.ts'],
     ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
