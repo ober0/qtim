@@ -53,22 +53,28 @@ export class ArticleRepository {
     async search(dto: ArticleSearchDto) {
         const qb = this.repo.createQueryBuilder('article').leftJoinAndSelect('article.author', 'author')
 
+        // Фильтрация
         if (dto.filters) {
             if (dto.filters.title) {
                 qb.andWhere('article.title ILIKE :title', { title: `%${dto.filters.title}%` })
             }
             if (dto.filters.createdAt) {
-                qb.andWhere('article.created_at = :publishedAt', { createdAt: dto.filters.createdAt })
+                qb.andWhere('article.created_at = :createdAt', { createdAt: dto.filters.createdAt })
+            }
+            if (dto.filters.updatedAt) {
+                qb.andWhere('article.updated_at = :updatedAt', { updatedAt: dto.filters.createdAt })
             }
             if (dto.filters.authorId) {
                 qb.andWhere('article.author_id = :authorId', { authorId: dto.filters.authorId })
             }
         }
 
+        // полнотекствоый поиск
         if (dto.query) {
             qb.andWhere('(article.title ILIKE :query OR article.content ILIKE :query)', { query: `%${dto.query}%` })
         }
 
+        // Сортировка
         if (dto.sorts) {
             Object.entries(dto.sorts).forEach(([field, order]) => {
                 qb.addOrderBy(`article.${field}`, order)
@@ -77,6 +83,7 @@ export class ArticleRepository {
             qb.addOrderBy('article.createdAt', 'DESC')
         }
 
+        // Пагинация
         const page = dto.pagination?.page || 1
         const count = dto.pagination?.count || 10
         qb.skip((page - 1) * count).take(count)

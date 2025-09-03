@@ -2,7 +2,7 @@ import { Body, Controller, Delete, HttpCode, HttpStatus, Param, Patch, Post, Use
 import { JwtAuthGuard } from '../auth/guards/auth.guard'
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger'
 import { ArticleService } from './article.service'
-import { ArticleDeleteResponseDto, ArticleResponseDto, ArticleSearchResponseDto } from './dto/response'
+import { ArticleCreateResponseDto, ArticleDeleteResponseDto, ArticleResponseDto, ArticleSearchResponseDto } from './dto/response'
 import { ArticleCreateDto } from './dto/create'
 import { DecodeUser } from '../../common/decorators/decode-user.decorator'
 import { UserBaseDto } from '../user/dto/base.dto'
@@ -14,7 +14,7 @@ export class ArticleController {
     constructor(private readonly articleService: ArticleService) {}
 
     @Post()
-    @ApiCreatedResponse({ type: ArticleResponseDto })
+    @ApiCreatedResponse({ type: ArticleCreateResponseDto })
     @ApiOperation({ summary: 'Создание статьи' })
     @ApiSecurity('bearer')
     @UseGuards(JwtAuthGuard)

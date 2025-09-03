@@ -16,6 +16,7 @@ export class ArticleService {
 
     async update(user: UserBaseDto, dto: ArticleCreateDto, id: string) {
         const article = await this.findOneById(id)
+        //Проверка на то, что юзер - автор статьи
         if (article.authorId !== user.id) throw new ForbiddenException('Нет доступа на редактирование')
         return this.articleRepository.update(dto, id)
     }
@@ -28,6 +29,7 @@ export class ArticleService {
 
     async delete(user: UserBaseDto, id: string) {
         const article = await this.findOneById(id)
+        //Проверка на то, что юзер - автор статьи
         if (article.authorId !== user.id) throw new ForbiddenException('Нет доступа на удаление')
         const result = await this.articleRepository.delete(id)
         return {

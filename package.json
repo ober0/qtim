@@ -9,7 +9,7 @@
         "build": "nest build",
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
         "dev": "nest start --watch",
-        "prod": "node dist/main.js",
+        "prod": "node dist/src/main.js",
         "migration:generate": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate src/migrations/Init -d src/modules/typeorm/cli.config.ts",
         "migration:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d src/modules/typeorm/cli.config.ts",
         "migration:revert": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d src/modules/typeorm/cli.config.ts",

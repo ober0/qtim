@@ -1,6 +1,6 @@
 import { IsNumber, IsOptional, ValidateNested } from 'class-validator'
 import { ArticleBaseDto } from './base'
-import { ApiProperty } from '@nestjs/swagger'
+import { ApiProperty, OmitType } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
 import { PaginationDto, PaginationResponseDto } from '../../../common/dto/pagination.dto'
 
@@ -24,3 +24,5 @@ export class ArticleSearchResponseDto {
     @Type(() => PaginationResponseDto)
     pagination?: PaginationResponseDto
 }
+
+export class ArticleCreateResponseDto extends OmitType(ArticleResponseDto, ['author']) {}
